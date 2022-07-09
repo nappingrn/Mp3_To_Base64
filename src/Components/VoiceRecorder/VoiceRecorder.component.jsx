@@ -20,38 +20,42 @@ export default function VoiceRecorder(){
     );
 }
 
-function postAudio(data){
-    fetch('https://samplewebsite.com/API/', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        parameterOne: data[0],
-        parameterTwo: data[1]
-      })
-    });
-}
+function submitAudio(data){
 
-function submitAudio(file){
+  if(data.size === 0){return;}
 
-  if(file.size === 0){return;}
-}
+  data.then(([buffer, blob]) => {
 
-function playAudio(file){
-  
-  file.then(([buffer, blob]) => {
-    // do what ever you want with buffer and blob
-    // Example: Create a mp3 file and play
     const file = new File(buffer, 'me-at-thevoice.mp3', {
       type: blob.type,
       lastModified: Date.now()
     });
   
+    new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    })
+    .then(value => 
+      console.log(JSON.stringify({song: value}))
+    );
+
+  });
+}
+
+function playAudio(file){
+  
+  file.then(([buffer, blob]) => {
+    
+    const file = new File(buffer, 'me-at-thevoice.mp3', {
+      type: blob.type,
+      lastModified: Date.now()
+    });
+
     const player = new Audio(URL.createObjectURL(file));
     player.play();
-  
+
   }).catch((e) => {
     alert('We could not retrieve your message');
     console.log(e);
