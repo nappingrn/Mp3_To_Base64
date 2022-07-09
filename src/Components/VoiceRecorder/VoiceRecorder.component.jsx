@@ -37,15 +37,24 @@ function submitAudio(data){
       reader.onload = (e) => resolve(e.target.result);
       reader.readAsDataURL(file);
     })
-    .then(value => 
-      console.log(JSON.stringify({song: value}))
-    );
+    .then(value => {
+
+      let xhr = new XMLHttpRequest();
+      
+      xhr.open("POST", "https://reqbin.com/echo/post/json");
+      xhr.setRequestHeader("Accept", "application/json");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onload = () => console.log(xhr.responseText);
+      xhr.send(JSON.stringify({"audio": value}));
+  });
 
   });
 }
 
 function playAudio(file){
-  
+
+  if(file.size === 0){return;}
+
   file.then(([buffer, blob]) => {
     
     const file = new File(buffer, 'me-at-thevoice.mp3', {
