@@ -37,8 +37,6 @@ function postAudio(data){
 function submitAudio(file){
 
   if(file.size === 0){return;}
-
-  
 }
 
 function playAudio(file){
@@ -58,7 +56,7 @@ function playAudio(file){
     alert('We could not retrieve your message');
     console.log(e);
   });
-  
+
 }
 
 function startRecording(recorder){
