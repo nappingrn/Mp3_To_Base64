@@ -1,4 +1,6 @@
 import React from "react";
+import Button from "react-bootstrap/Button";
+
 
 export default function VoiceRecorder(){
 
@@ -9,11 +11,10 @@ export default function VoiceRecorder(){
   return (
     <div class="container text-center">
 
-     <button onClick={e => startRecording(recorder)}>start</button>
-     <button onClick={e => fileToReturn  = stopRecording(recorder)}>stop</button>
-     <button onClick = {e => submitAudio(fileToReturn)}>Submit Audio?</button>
-     <button onClick = {e => playAudio(fileToReturn)}> Play Previous Audio</button>
-     <button onClick = {e => playAudio(fileToReturn)}> Play Audio</button>
+     <Button variant="success" onClick={e => startRecording(recorder)}>Start Recording</Button>
+     <Button variant="danger" onClick={e => fileToReturn  = stopRecording(recorder)}>Stop Recording</Button>
+     <Button variant="info" onClick = {e => submitAudio(fileToReturn)}>Submit Audio</Button>
+     <Button variant="primary" onClick = {e => playAudio(fileToReturn)}> Playback</Button>
 
     </div>
     );
@@ -35,21 +36,29 @@ function postAudio(data){
 
 function submitAudio(file){
 
-  console.log("submitted");
-  file.then(value => console.log(value));
+  if(file.size === 0){return;}
 
-  file.then(value => console.log(JSON.stringify({
-
-    parameterOne: value[0],
-    parameterTwo: value[1]
-
-  })));
+  
 }
 
 function playAudio(file){
-  console.log("played");
-  var audio = new Audio(file.webkitRelativePath);
-  audio.play();
+  
+  file.then(([buffer, blob]) => {
+    // do what ever you want with buffer and blob
+    // Example: Create a mp3 file and play
+    const file = new File(buffer, 'me-at-thevoice.mp3', {
+      type: blob.type,
+      lastModified: Date.now()
+    });
+  
+    const player = new Audio(URL.createObjectURL(file));
+    player.play();
+  
+  }).catch((e) => {
+    alert('We could not retrieve your message');
+    console.log(e);
+  });
+  
 }
 
 function startRecording(recorder){

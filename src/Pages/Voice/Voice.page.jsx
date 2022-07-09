@@ -7,8 +7,9 @@ export default function VoicePage(){
     return(
 
         <div>
-        <VoiceRecorder />
         <VoicePlayback />
+
+        <VoiceRecorder />
         </div>
     );
 }

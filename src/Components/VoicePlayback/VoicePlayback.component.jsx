@@ -4,7 +4,7 @@ export default function VoicePlayback(){
 
     return(
 
-        <div>Welcome to durgasoft</div>
+        <div>Voice Recording Test</div>
 
     );
 }
